@@ -1,0 +1,52 @@
+/* arduino nano tests for the grouch and the IR LFR idea
+  obly real difference over uno is the baud which seems 
+  ideal at its default upload baud of 56700.  
+
+  should display 3 values on the anolge pins 0-2 of which
+  should have IR detectors/decoders for input.
+
+      THIS IS FOR TESTING PORPUSES AND SHOULD NOT BE USED 
+*/
+
+int IRIN0 = A0;  //IR detector 1 right
+int IRIN1 = A1;  //IR detector 2 font
+int IRIN2 = A2; //IR detector 3 left
+
+int IRINVAL0 = 0; //IR detector 1 right
+int IRINVAL1 = 0; //IR detector 2 front
+int IRINVAL2 = 0;
+
+int IROUT = 3;
+int val = 0;
+
+int loop_cnt = 0;
+
+byte IRL0, IRF1, IRR2;
+
+void setup()
+{
+  pinMode(IRIN0, INPUT);
+  pinMode(IRIN1, INPUT);
+  pinMode(IRIN2, INPUT);
+  pinMode(IROUT, OUTPUT);
+  Serial.begin(57600);	
+}
+
+void loop()
+{
+	  if ( loop_cnt > 100 ) { // every 100 msecs get new data
+    	loop_cnt = 0;
+
+    IRINVAL0 = analogRead(IRIN0);
+    IRINVAL1 = analogRead(IRIN1);
+    IRINVAL2 = analogRead(IRIN2);
+    IRL0 = IRINVAL0;
+    IRF1 = IRINVAL1;
+    IRR2 = IRINVAL2;
+    }
+  loop_cnt++;
+  delay(1);
+  Serial.print("IRL0: "); Serial.print((byte)IRL0, DEC);
+  Serial.print("\tIRF1: "); Serial.print((byte)IRF1, DEC);
+  Serial.print("\tIRR2: "); Serial.println((byte)IRR2, DEC);
+}
